@@ -1,66 +1,90 @@
-import { createRouter, createWebHistory } from "vue-router";
-import Dashboard from "../views/Dashboard.vue";
-import Tables from "../views/Tables.vue";
-import Billing from "../views/Billing.vue";
-import VirtualReality from "../views/VirtualReality.vue";
-import RTL from "../views/Rtl.vue";
-import Profile from "../views/Profile.vue";
-import Signup from "../views/Signup.vue";
-import Signin from "../views/Signin.vue";
+import { createRouter, createWebHashHistory } from "vue-router";
+import Style from "@/views/StyleView.vue";
+import Home from "@/views/HomeView.vue";
 
 const routes = [
   {
+    meta: {
+      title: "Select style",
+    },
     path: "/",
-    name: "/",
-    redirect: "/dashboard-default",
+    name: "style",
+    component: Style,
   },
   {
-    path: "/dashboard-default",
-    name: "Dashboard",
-    component: Dashboard,
+    // Document title tag
+    // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
+    meta: {
+      title: "Dashboard",
+    },
+    path: "/dashboard",
+    name: "dashboard",
+    component: Home,
   },
   {
+    meta: {
+      title: "Tables",
+    },
     path: "/tables",
-    name: "Tables",
-    component: Tables,
+    name: "tables",
+    component: () => import("@/views/TablesView.vue"),
   },
   {
-    path: "/billing",
-    name: "Billing",
-    component: Billing,
+    meta: {
+      title: "Forms",
+    },
+    path: "/forms",
+    name: "forms",
+    component: () => import("@/views/FormsView.vue"),
   },
   {
-    path: "/virtual-reality",
-    name: "Virtual Reality",
-    component: VirtualReality,
-  },
-  {
-    path: "/rtl-page",
-    name: "RTL",
-    component: RTL,
-  },
-  {
+    meta: {
+      title: "Profile",
+    },
     path: "/profile",
-    name: "Profile",
-    component: Profile,
+    name: "profile",
+    component: () => import("@/views/ProfileView.vue"),
   },
   {
-    path: "/signin",
-    name: "Signin",
-    component: Signin,
+    meta: {
+      title: "Ui",
+    },
+    path: "/ui",
+    name: "ui",
+    component: () => import("@/views/UiView.vue"),
   },
   {
-    path: "/signup",
-    name: "Signup",
-    component: Signup,
+    meta: {
+      title: "Responsive layout",
+    },
+    path: "/responsive",
+    name: "responsive",
+    component: () => import("@/views/ResponsiveView.vue"),
   },
-  
+  {
+    meta: {
+      title: "Login",
+    },
+    path: "/login",
+    name: "login",
+    component: () => import("@/views/LoginView.vue"),
+  },
+  {
+    meta: {
+      title: "Error",
+    },
+    path: "/error",
+    name: "error",
+    component: () => import("@/views/ErrorView.vue"),
+  },
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHashHistory(),
   routes,
-  linkActiveClass: "active",
+  scrollBehavior(to, from, savedPosition) {
+    return savedPosition || { top: 0 };
+  },
 });
 
 export default router;
