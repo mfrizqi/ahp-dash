@@ -18,6 +18,9 @@ const click = (slug) => {
   styleStore.setStyle(slug);
   router.push("/dashboard");
 };
+
+styleStore.setStyle("basic");
+router.push("/dashboard");
 </script>
 
 <template>
