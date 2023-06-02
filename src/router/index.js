@@ -1,6 +1,7 @@
-import { createRouter, createWebHistory, } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Style from "@/views/StyleView.vue";
 import Home from "@/views/HomeView.vue";
+import HomePage from "@/views/HomePage.vue";
 
 const routes = [
   {
@@ -20,6 +21,16 @@ const routes = [
     path: "/dashboard",
     name: "dashboard",
     component: Home,
+  },
+  {
+    // Document title tag
+    // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
+    meta: {
+      title: "Dashboard",
+    },
+    path: "/home",
+    name: "home",
+    component: HomePage,
   },
   {
     meta: {
