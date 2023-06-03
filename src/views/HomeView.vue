@@ -25,6 +25,7 @@ const fillChartData = () => {
 let studentDatas = reactive({
   raw: [],
   calculated: [],
+  finalAHP: [],
 });
 
 const readExcelFile2 = async () => {
@@ -102,7 +103,13 @@ const calculateStudent = () => {
     };
   });
 
-  console.log(studentDatas.calculated);
+  studentDatas.calculated.sort((a, b) => {
+    return b.ahpTotal - a.ahpTotal;
+  });
+
+  studentDatas.finalAHP = studentDatas.calculated.filter(
+    (el) => el.ahpTotal > 0.8
+  );
 };
 
 onMounted(async () => {
@@ -131,31 +138,54 @@ onMounted(async () => {
         /> -->
       </SectionTitleLineWithButton>
 
-      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
         <CardBoxWidget
-          color="text-emerald-500"
+          color="text-blue-500"
           :icon="mdiAccountMultiple"
           :number="studentDatas.raw.length"
           label="Jumlah Wisudawan"
         />
         <CardBoxWidget
-          color="text-yellow-500"
+          color="text-emerald-500"
           :icon="mdiAccountMultiple"
           :number="25"
           label="Jumlah Calon Mahasiswa Berprestasi"
+        />
+        <CardBoxWidget
+          color="text-yellow-500"
+          :icon="mdiAccountMultiple"
+          :number="studentDatas.finalAHP.length"
+          label="Mahasiswa Berprestasi"
         />
       </div>
 
       <SectionTitleLineWithButton
         :icon="mdiAccountMultiple"
-        title="Mahasiswa"
+        title="Wisudawan Berprestasi"
         main
       />
       <CardBox has-table>
         <!-- <TableSampleClients /> -->
         <TableMahasiswa
-          v-if="studentDatas.raw.length > 0"
-          :data="studentDatas.raw"
+          v-if="studentDatas.finalAHP.length > 0"
+          ahp
+          :data="studentDatas.finalAHP"
+        />
+      </CardBox>
+
+      <div class="py-12"></div>
+
+      <SectionTitleLineWithButton
+        :icon="mdiAccountMultiple"
+        title="Daftar Wisudawan"
+        main
+      />
+      <CardBox has-table>
+        <!-- <TableSampleClients /> -->
+        <TableMahasiswa
+          v-if="studentDatas.calculated.length > 0"
+          ahp
+          :data="studentDatas.calculated"
         />
       </CardBox>
     </SectionMain>

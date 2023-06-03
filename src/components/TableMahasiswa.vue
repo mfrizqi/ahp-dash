@@ -1,19 +1,16 @@
 <!-- eslint-disable vue/require-prop-types -->
 <script setup>
 import { computed, ref, onMounted } from "vue";
-// import { useMainStore } from "@/stores/main";
-import { mdiEye, mdiTrashCan } from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
-const props = defineProps(["data", "checkable"]);
+
+// --------------
+
+const props = defineProps({ data: Array, checkable: Boolean, ahp: Boolean });
 const dataTable = ref(props.data);
-
-// const mainStore = useMainStore();
-
-// const items = computed(() => mainStore.clients);
 
 const isModalActive = ref(false);
 
@@ -111,6 +108,7 @@ onMounted(() => {
         <th>IPK</th>
         <th>TAK</th>
         <th>Prestasi</th>
+        <th v-if="ahp">Score AHP</th>
       </tr>
     </thead>
     <tbody>
@@ -136,6 +134,9 @@ onMounted(() => {
         </td>
         <td data-label="score_prestasi">
           {{ client.SCORE }}
+        </td>
+        <td v-if="ahp" data-label="score_ahp">
+          {{ client.ahpTotal }}
         </td>
       </tr>
     </tbody>
