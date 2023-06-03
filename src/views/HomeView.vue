@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted, reactive } from "vue";
 import { useMainStore } from "@/stores/main";
 import {
   mdiAccountMultiple,
@@ -13,6 +13,7 @@ import CardBox from "@/components/CardBox.vue";
 import TableSampleClients from "@/components/TableSampleClients.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
+import * as XLSX from "xlsx";
 
 const chartData = ref(null);
 
@@ -20,10 +21,32 @@ const fillChartData = () => {
   chartData.value = chartConfig.sampleChartData();
 };
 
-onMounted(() => {
-  fillChartData();
+let studentDatas = reactive({
+  raw: [],
 });
 
+const readExcelFile2 = async () => {
+  console.log("readExcelFile2");
+  const url = new URL("./data_wisudawan.xls", import.meta.url).href;
+  const data = await (await fetch(url)).arrayBuffer();
+  /* data is an ArrayBuffer */
+  const workbook = XLSX.read(data);
+
+  const firstSheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[firstSheetName];
+  const sheetValues = XLSX.utils.sheet_to_json(worksheet);
+  studentDatas.raw = sheetValues;
+};
+
+const calculateStudent = () =>{
+  console.log(studentDatas.raw);
+}
+
+onMounted(async () => {
+  fillChartData();
+  await readExcelFile2();
+  calculateStudent();
+});
 </script>
 
 <template>
