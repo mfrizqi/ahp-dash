@@ -32,7 +32,9 @@ const itemsPaginated = computed(() =>
   )
 );
 
-const numPages = computed(() => Math.ceil(dataTable.value.length / perPage.value));
+const numPages = computed(() =>
+  Math.ceil(dataTable.value.length / perPage.value)
+);
 
 const currentPageHuman = computed(() => currentPage.value + 1);
 
@@ -71,7 +73,7 @@ const checked = (isChecked, client) => {
 
 onMounted(() => {
   console.log(dataTable);
-})
+});
 </script>
 
 <template>
@@ -110,7 +112,7 @@ onMounted(() => {
         <th>TAK</th>
         <th>Score AHP</th>
         <th>Score Prestasi</th>
-        <th />
+        <!-- <th /> -->
       </tr>
     </thead>
     <tbody>
@@ -119,33 +121,25 @@ onMounted(() => {
           v-if="checkable"
           @checked="checked($event, client)"
         />
-        <td>
+        <td data-label="nim">
           <!-- <UserAvatar
             :username="client.name"
             class="w-24 h-24 mx-auto lg:w-6 lg:h-6"
           /> -->
           {{ client.STUDENTID }}
         </td>
-        <td data-label="Name">
+        <td data-label="nama">
           {{ client.FULLNAME }}
         </td>
-        <td data-label="Company">
+        <td data-label="ipk">
           {{ client.GPA }}
         </td>
-        <td data-label="City">
+        <td data-label="tak">
           {{ client.STUDENTACTIVITYSCORE }}
         </td>
-        <td data-label="Progress" class="lg:w-32">
-
-        </td>
-        <td data-label="Created" class="lg:w-1 whitespace-nowrap">
-          <small
-            class="text-gray-500 dark:text-slate-400"
-            :title="client.created"
-            >{{ client.created }}</small
-          >
-        </td>
-        <td class="before:hidden lg:w-1 whitespace-nowrap">
+        <td data-label="score_ahp" class="lg:w-32">000</td>
+        <td data-label="score total" class="lg:w-1 whitespace-nowrap">0000</td>
+        <!-- <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <BaseButton
               color="info"
@@ -160,7 +154,7 @@ onMounted(() => {
               @click="isModalDangerActive = true"
             />
           </BaseButtons>
-        </td>
+        </td> -->
       </tr>
     </tbody>
   </table>
