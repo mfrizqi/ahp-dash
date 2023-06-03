@@ -11,6 +11,7 @@ import SectionMain from "@/components/SectionMain.vue";
 import CardBoxWidget from "@/components/CardBoxWidget.vue";
 import CardBox from "@/components/CardBox.vue";
 import TableSampleClients from "@/components/TableSampleClients.vue";
+import TableMahasiswa from "@/components/TableMahasiswa.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import * as XLSX from "xlsx";
@@ -38,13 +39,13 @@ const readExcelFile2 = async () => {
   studentDatas.raw = sheetValues;
 };
 
-const calculateStudent = () =>{
+const calculateStudent = () => {
   console.log(studentDatas.raw);
 
   // studentDatas.raw.forEach(element => {
-    
+
   // });
-}
+};
 
 onMounted(async () => {
   fillChartData();
@@ -83,7 +84,6 @@ onMounted(async () => {
           color="text-yellow-500"
           :icon="mdiAccountMultiple"
           :number="7770"
-          prefix="$"
           label="Jumlah Calon Mahasiswa Berprestasi"
         />
       </div>
@@ -94,7 +94,8 @@ onMounted(async () => {
         main
       />
       <CardBox has-table>
-        <TableSampleClients />
+        <!-- <TableSampleClients /> -->
+        <TableMahasiswa :data="studentDatas.raw" v-if="studentDatas.raw.length > 0" />
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>
