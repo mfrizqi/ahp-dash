@@ -105,14 +105,11 @@ onMounted(() => {
   <table>
     <thead>
       <tr>
-        <th v-if="checkable" />
         <th>NIM</th>
         <th>Nama Mahasiswa</th>
         <th>IPK</th>
         <th>TAK</th>
-        <th>Score AHP</th>
         <th>Score Prestasi</th>
-        <!-- <th /> -->
       </tr>
     </thead>
     <tbody>
@@ -122,10 +119,6 @@ onMounted(() => {
           @checked="checked($event, client)"
         />
         <td data-label="nim">
-          <!-- <UserAvatar
-            :username="client.name"
-            class="w-24 h-24 mx-auto lg:w-6 lg:h-6"
-          /> -->
           {{ client.STUDENTID }}
         </td>
         <td data-label="nama">
@@ -137,24 +130,9 @@ onMounted(() => {
         <td data-label="tak">
           {{ client.STUDENTACTIVITYSCORE }}
         </td>
-        <td data-label="score_ahp" class="lg:w-32">000</td>
-        <td data-label="score total" class="lg:w-1 whitespace-nowrap">0000</td>
-        <!-- <td class="before:hidden lg:w-1 whitespace-nowrap">
-          <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton
-              color="info"
-              :icon="mdiEye"
-              small
-              @click="isModalActive = true"
-            />
-            <BaseButton
-              color="danger"
-              :icon="mdiTrashCan"
-              small
-              @click="isModalDangerActive = true"
-            />
-          </BaseButtons>
-        </td> -->
+        <td data-label="score_prestasi">
+          {{ client.SCORE }}
+        </td>
       </tr>
     </tbody>
   </table>
