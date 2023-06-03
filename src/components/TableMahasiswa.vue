@@ -105,11 +105,12 @@ onMounted(() => {
   <table>
     <thead>
       <tr>
+        <th>No</th>
         <th>NIM</th>
         <th>Nama Mahasiswa</th>
         <th>IPK</th>
         <th>TAK</th>
-        <th>Score Prestasi</th>
+        <th>Prestasi</th>
       </tr>
     </thead>
     <tbody>
@@ -118,6 +119,9 @@ onMounted(() => {
           v-if="checkable"
           @checked="checked($event, client)"
         />
+        <td data-label="no">
+          {{ client.NO }}
+        </td>
         <td data-label="nim">
           {{ client.STUDENTID }}
         </td>

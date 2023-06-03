@@ -24,6 +24,7 @@ const fillChartData = () => {
 
 let studentDatas = reactive({
   raw: [],
+  calculated: [],
 });
 
 const readExcelFile2 = async () => {
@@ -39,12 +40,69 @@ const readExcelFile2 = async () => {
   studentDatas.raw = sheetValues;
 };
 
+const AHPValue = {
+  ipk: {
+    main: 0.63,
+    sub: {
+      greater: 0.83,
+      lesser: 0.17,
+    },
+  },
+  tak: {
+    main: 0.11,
+    sub: {
+      greater: 0.83,
+      lesser: 0.17,
+    },
+  },
+  prestasi: {
+    main: 0.26,
+    sub: {
+      greater: 0.83,
+      lesser: 0.17,
+    },
+  },
+};
+
 const calculateStudent = () => {
-  console.log(studentDatas.raw);
+  studentDatas.calculated = studentDatas.raw.map((el) => {
+    let ahp = {
+      ipk: 0,
+      tak: 0,
+      prestasi: 0,
+    };
 
-  // studentDatas.raw.forEach(element => {
+    //Checking GPA / IPK
+    if (el.GPA >= 3) {
+      ahp.ipk = AHPValue.ipk.sub.greater * AHPValue.ipk.main;
+    } else {
+      ahp.ipk = AHPValue.ipk.sub.lesser * AHPValue.ipk.main;
+    }
 
-  // });
+    // Checkin TAK / STUDENT ACTIVITY SCORE
+    if (el.STUDENTACTIVITYSCORE >= 60) {
+      ahp.tak = AHPValue.tak.sub.greater * AHPValue.tak.main;
+    } else {
+      ahp.tak = AHPValue.tak.sub.lesser * AHPValue.tak.main;
+    }
+
+    // Checkin Prestasi / SCORE
+    if (el.SCORE >= 60) {
+      ahp.prestasi = AHPValue.prestasi.sub.greater * AHPValue.prestasi.main;
+    } else {
+      ahp.prestasi = AHPValue.prestasi.sub.lesser * AHPValue.prestasi.main;
+    }
+
+    ahp.total = ahp.ipk + ahp.tak + ahp.prestasi;
+
+    return {
+      ...el,
+      ahp,
+      ahpTotal: ahp.total,
+    };
+  });
+
+  console.log(studentDatas.calculated);
 };
 
 onMounted(async () => {
