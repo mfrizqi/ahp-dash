@@ -109,6 +109,9 @@ onMounted(() => {
         <th>TAK</th>
         <th>Prestasi</th>
         <th v-if="ahp">Score AHP</th>
+        <th v-if="ahp">AHP IPK</th>
+        <th v-if="ahp">AHP TAK</th>
+        <th v-if="ahp">AHP Prestasi</th>
       </tr>
     </thead>
     <tbody>
@@ -136,7 +139,16 @@ onMounted(() => {
           {{ client.SCORE }}
         </td>
         <td v-if="ahp" data-label="score_ahp">
-          {{ client.ahpTotal }}
+          {{ client.ahpTotal.toFixed(2) }}
+        </td>
+        <td v-if="ahp" data-label="score_ipk">
+          {{ client.ahp.ipk.toFixed(2) }}
+        </td>
+        <td v-if="ahp" data-label="score_tak">
+          {{ client.ahp.tak.toFixed(2) }}
+        </td>
+        <td v-if="ahp" data-label="score_prestasi">
+          {{ client.ahp.prestasi.toFixed(2) }}
         </td>
       </tr>
     </tbody>
