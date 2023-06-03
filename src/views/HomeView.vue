@@ -1,16 +1,16 @@
 <script setup>
-import { computed, ref, onMounted, reactive } from "vue";
-import { useMainStore } from "@/stores/main";
+import { ref, onMounted, reactive } from "vue";
+// import { useMainStore } from "@/stores/main";
 import {
   mdiAccountMultiple,
-  mdiCartOutline,
+  // mdiCartOutline,
   mdiChartTimelineVariant,
 } from "@mdi/js";
 import * as chartConfig from "@/components/Charts/chart.config.js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBoxWidget from "@/components/CardBoxWidget.vue";
 import CardBox from "@/components/CardBox.vue";
-import TableSampleClients from "@/components/TableSampleClients.vue";
+// import TableSampleClients from "@/components/TableSampleClients.vue";
 import TableMahasiswa from "@/components/TableMahasiswa.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
@@ -77,13 +77,13 @@ onMounted(async () => {
         <CardBoxWidget
           color="text-emerald-500"
           :icon="mdiAccountMultiple"
-          :number="512"
+          :number="studentDatas.raw.length"
           label="Jumlah Wisudawan"
         />
         <CardBoxWidget
           color="text-yellow-500"
           :icon="mdiAccountMultiple"
-          :number="7770"
+          :number="25"
           label="Jumlah Calon Mahasiswa Berprestasi"
         />
       </div>
@@ -95,7 +95,10 @@ onMounted(async () => {
       />
       <CardBox has-table>
         <!-- <TableSampleClients /> -->
-        <TableMahasiswa :data="studentDatas.raw" v-if="studentDatas.raw.length > 0" />
+        <TableMahasiswa
+          v-if="studentDatas.raw.length > 0"
+          :data="studentDatas.raw"
+        />
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>
