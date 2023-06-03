@@ -40,6 +40,10 @@ const readExcelFile2 = async () => {
 
 const calculateStudent = () =>{
   console.log(studentDatas.raw);
+
+  // studentDatas.raw.forEach(element => {
+    
+  // });
 }
 
 onMounted(async () => {
