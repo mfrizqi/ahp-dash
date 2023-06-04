@@ -110,6 +110,10 @@ const calculateStudent = () => {
   studentDatas.finalAHP = studentDatas.calculated.filter(
     (el) => el.ahpTotal > 0.8
   );
+
+  studentDatas.finalAHP.sort((a, b) => {
+    return b.SCORE - a.SCORE;
+  });
 };
 
 onMounted(async () => {
