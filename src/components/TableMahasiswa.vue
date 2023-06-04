@@ -120,19 +120,34 @@ onMounted(() => {
           v-if="checkable"
           @checked="checked($event, client)"
         />
-        <td data-label="no" :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''">
+        <td
+          data-label="no"
+          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+        >
           {{ client.NO }}
         </td>
-        <td data-label="nim" :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''">
+        <td
+          data-label="nim"
+          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+        >
           {{ client.STUDENTID }}
         </td>
-        <td data-label="nama" :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''">
+        <td
+          data-label="nama"
+          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+        >
           {{ client.FULLNAME }}
         </td>
-        <td data-label="ipk" :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''">
+        <td
+          data-label="ipk"
+          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+        >
           {{ client.GPA }}
         </td>
-        <td data-label="tak" :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''">
+        <td
+          data-label="tak"
+          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+        >
           {{ client.STUDENTACTIVITYSCORE }}
         </td>
         <td
