@@ -88,7 +88,7 @@ const calculateStudent = () => {
     }
 
     // Checkin Prestasi / SCORE
-    if (el.SCORE >= 60) {
+    if (el.SCORE >= 5) {
       ahp.prestasi = AHPValue.prestasi.sub.greater * AHPValue.prestasi.main;
     } else {
       ahp.prestasi = AHPValue.prestasi.sub.lesser * AHPValue.prestasi.main;
