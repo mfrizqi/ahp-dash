@@ -152,20 +152,20 @@ onMounted(async () => {
         <CardBoxWidget
           color="text-emerald-500"
           :icon="mdiAccountMultiple"
-          :number="25"
+          :number="studentDatas.finalAHP.length"
           label="Jumlah Calon Mahasiswa Berprestasi"
         />
         <CardBoxWidget
           color="text-yellow-500"
           :icon="mdiAccountMultiple"
-          :number="studentDatas.finalAHP.length"
+          :number="5"
           label="Mahasiswa Berprestasi"
         />
       </div>
 
       <SectionTitleLineWithButton
         :icon="mdiAccountMultiple"
-        title="Wisudawan Berprestasi"
+        title="Calon Wisudawan Berprestasi"
         main
       />
       <CardBox has-table>
@@ -173,6 +173,7 @@ onMounted(async () => {
         <TableMahasiswa
           v-if="studentDatas.finalAHP.length > 0"
           ahp
+          top-five
           :data="studentDatas.finalAHP"
         />
       </CardBox>

@@ -115,39 +115,58 @@ onMounted(() => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="client in itemsPaginated" :key="client.id">
+      <tr v-for="(client, index) in itemsPaginated" :key="client.id">
         <TableCheckboxCell
           v-if="checkable"
           @checked="checked($event, client)"
         />
-        <td data-label="no">
+        <td data-label="no" :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''">
           {{ client.NO }}
         </td>
-        <td data-label="nim">
+        <td data-label="nim" :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''">
           {{ client.STUDENTID }}
         </td>
-        <td data-label="nama">
+        <td data-label="nama" :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''">
           {{ client.FULLNAME }}
         </td>
-        <td data-label="ipk">
+        <td data-label="ipk" :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''">
           {{ client.GPA }}
         </td>
-        <td data-label="tak">
+        <td data-label="tak" :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''">
           {{ client.STUDENTACTIVITYSCORE }}
         </td>
-        <td data-label="score_prestasi">
+        <td
+          data-label="score_prestasi"
+          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+        >
           {{ client.SCORE }}
         </td>
-        <td v-if="ahp" data-label="score_ahp">
+        <td
+          v-if="ahp"
+          data-label="score_ahp"
+          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+        >
           {{ client.ahpTotal.toFixed(2) }}
         </td>
-        <td v-if="ahp" data-label="score_ipk">
+        <td
+          v-if="ahp"
+          data-label="score_ipk"
+          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+        >
           {{ client.ahp.ipk.toFixed(2) }}
         </td>
-        <td v-if="ahp" data-label="score_tak">
+        <td
+          v-if="ahp"
+          data-label="score_tak"
+          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+        >
           {{ client.ahp.tak.toFixed(2) }}
         </td>
-        <td v-if="ahp" data-label="score_prestasi">
+        <td
+          v-if="ahp"
+          data-label="score_prestasi"
+          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+        >
           {{ client.ahp.prestasi.toFixed(2) }}
         </td>
       </tr>
