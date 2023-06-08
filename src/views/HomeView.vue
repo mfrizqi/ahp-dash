@@ -22,6 +22,9 @@ const fillChartData = () => {
   chartData.value = chartConfig.sampleChartData();
 };
 
+//
+// AHP Calculation
+//
 let studentDatas = reactive({
   raw: [],
   calculated: [],
@@ -41,6 +44,9 @@ const readExcelFile2 = async () => {
   studentDatas.raw = sheetValues;
 };
 
+//
+// Nilai hasil perhitungan AHP
+//
 const AHPValue = {
   ipk: {
     main: 0.63,
@@ -65,6 +71,9 @@ const AHPValue = {
   },
 };
 
+//
+// Function: Menghithung AHP dari tiap Mahasiswa
+//
 const calculateStudent = () => {
   studentDatas.calculated = studentDatas.raw.map((el) => {
     let ahp = {
@@ -80,14 +89,14 @@ const calculateStudent = () => {
       ahp.ipk = AHPValue.ipk.sub.lesser * AHPValue.ipk.main;
     }
 
-    // Checkin TAK / STUDENT ACTIVITY SCORE
+    // Checking TAK / STUDENT ACTIVITY SCORE
     if (el.STUDENTACTIVITYSCORE >= 60) {
       ahp.tak = AHPValue.tak.sub.greater * AHPValue.tak.main;
     } else {
       ahp.tak = AHPValue.tak.sub.lesser * AHPValue.tak.main;
     }
 
-    // Checkin Prestasi / SCORE
+    // Checking Prestasi / SCORE
     if (el.SCORE >= 5) {
       ahp.prestasi = AHPValue.prestasi.sub.greater * AHPValue.prestasi.main;
     } else {
@@ -103,14 +112,17 @@ const calculateStudent = () => {
     };
   });
 
+  // Sort Descending berdasarkan AHP
   studentDatas.calculated.sort((a, b) => {
     return b.ahpTotal - a.ahpTotal;
   });
 
+  // Filter Data Mahasiswa yang nilai AHP > 0.8
   studentDatas.finalAHP = studentDatas.calculated.filter(
     (el) => el.ahpTotal > 0.8
   );
 
+  // Sort data final AHP descending
   studentDatas.finalAHP.sort((a, b) => {
     return b.SCORE - a.SCORE;
   });
