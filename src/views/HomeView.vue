@@ -142,6 +142,7 @@ onMounted(async () => {
         :icon="mdiChartTimelineVariant"
         title="Overview"
         main
+        id="overview"
       >
         <!-- <BaseButton
           href="https://github.com/justboil/admin-one-vue-tailwind"
@@ -154,7 +155,10 @@ onMounted(async () => {
         /> -->
       </SectionTitleLineWithButton>
 
-      <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
+      <div
+        id="calon_berprestasi"
+        class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6"
+      >
         <CardBoxWidget
           color="text-blue-500"
           :icon="mdiAccountMultiple"
@@ -193,6 +197,7 @@ onMounted(async () => {
       <div class="py-12"></div>
 
       <SectionTitleLineWithButton
+        id="daftar_wisudawan"
         :icon="mdiAccountMultiple"
         title="Daftar Wisudawan"
         main
@@ -201,10 +206,15 @@ onMounted(async () => {
         <!-- <TableSampleClients /> -->
         <TableMahasiswa
           v-if="studentDatas.calculated.length > 0"
-          ahp
           :data="studentDatas.calculated"
         />
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
+
+<style scoped>
+* {
+  scroll-behavior: smooth;
+}
+</style>

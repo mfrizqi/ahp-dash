@@ -1,5 +1,6 @@
 import {
   mdiAccountCircle,
+  mdiAccountMultiple,
   mdiMonitor,
   mdiGithub,
   mdiLock,
@@ -18,6 +19,16 @@ export default [
     to: "/dashboard",
     icon: mdiMonitor,
     label: "Dashboard",
+  },
+  {
+    icon: mdiAccountMultiple,
+    label: "Daftar Calon Berprestasi",
+    element: "calon_berprestasi",
+  },
+  {
+    icon: mdiAccountCircle,
+    label: "Daftar Wisudawan",
+    element: "daftar_wisudawan",
   },
   // {
   //   to: "/tables",

@@ -11,6 +11,7 @@ import FormControl from "@/components/FormControl.vue";
 import NavBar from "@/components/NavBar.vue";
 import NavBarItemPlain from "@/components/NavBarItemPlain.vue";
 import AsideMenu from "@/components/AsideMenu.vue";
+import BaseButton from "@/components/BaseButton.vue";
 
 useMainStore().setUser({
   name: "John Doe",
@@ -41,6 +42,16 @@ const menuClick = (event, item) => {
   if (item.isLogout) {
     //
   }
+
+  console.log(item);
+  if (!item.element) return;
+  // var my_element = document.getElementById(item.element);
+  // my_element.scrollTo({
+  //   behavior: "smooth",
+  //   block: "end",
+  //   inline: "nearest",
+  // });
+  document.getElementById(item.element).scrollIntoView();
 };
 </script>
 
@@ -56,7 +67,6 @@ const menuClick = (event, item) => {
       class="pt-14 min-h-screen w-screen transition-position lg:w-auto bg-gray-50 dark:bg-slate-800 dark:text-slate-100"
     >
       <NavBar
-        :menu="menuNavBar"
         :class="[
           layoutAsidePadding,
           { 'ml-60 lg:ml-0': isAsideMobileExpanded },
@@ -72,19 +82,25 @@ const menuClick = (event, item) => {
             size="24"
           />
         </NavBarItemPlain>
-        <NavBarItemPlain
+        <!-- <NavBarItemPlain
           display="hidden lg:flex xl:hidden"
           @click.prevent="isAsideLgActive = true"
         >
           <BaseIcon :path="mdiMenu" size="24" />
-        </NavBarItemPlain>
-        <NavBarItemPlain use-margin>
-          <FormControl
-            placeholder="Search (ctrl+k)"
-            ctrl-k-focus
-            transparent
-            borderless
-          />
+        </NavBarItemPlain> -->
+        <NavBarItemPlain>
+          <BaseButton
+            label="Daftar wisudawan"
+            color="info"
+            href="#daftar_wisudawan"
+            class="mr-6"
+          ></BaseButton>
+
+          <BaseButton
+            label="Calon Wisudawan Berprestasi"
+            color="info"
+            href="#calon_berprestasi"
+          ></BaseButton>
         </NavBarItemPlain>
       </NavBar>
       <AsideMenu

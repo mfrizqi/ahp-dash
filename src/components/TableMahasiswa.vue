@@ -108,10 +108,10 @@ onMounted(() => {
         <th>IPK</th>
         <th>TAK</th>
         <th>Prestasi</th>
-        <th v-if="ahp">Score AHP</th>
-        <th v-if="ahp">AHP IPK</th>
-        <th v-if="ahp">AHP TAK</th>
-        <th v-if="ahp">AHP Prestasi</th>
+        <th>Score AHP</th>
+        <th>AHP IPK</th>
+        <th>AHP TAK</th>
+        <th>AHP Prestasi</th>
       </tr>
     </thead>
     <tbody>
@@ -122,65 +122,101 @@ onMounted(() => {
         />
         <td
           data-label="no"
-          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+          :class="
+            index < 5 && currentPage === 0 && ahp
+              ? 'bg-emerald-300 hover:bg-emerald-400'
+              : ''
+          "
         >
           {{ client.NO }}
         </td>
         <td
           data-label="nim"
-          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+          :class="
+            index < 5 && currentPage === 0 && ahp
+              ? 'bg-emerald-300 hover:bg-emerald-400'
+              : ''
+          "
         >
           {{ client.STUDENTID }}
         </td>
         <td
           data-label="nama"
-          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+          :class="
+            index < 5 && currentPage === 0 && ahp
+              ? 'bg-emerald-300 hover:bg-emerald-400'
+              : ''
+          "
         >
           {{ client.FULLNAME }}
         </td>
         <td
           data-label="ipk"
-          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+          :class="
+            index < 5 && currentPage === 0 && ahp
+              ? 'bg-emerald-300 hover:bg-emerald-400'
+              : ''
+          "
         >
           {{ client.GPA }}
         </td>
         <td
           data-label="tak"
-          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+          :class="
+            index < 5 && currentPage === 0 && ahp
+              ? 'bg-emerald-300 hover:bg-emerald-400'
+              : ''
+          "
         >
           {{ client.STUDENTACTIVITYSCORE }}
         </td>
         <td
           data-label="score_prestasi"
-          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+          :class="
+            index < 5 && currentPage === 0 && ahp
+              ? 'bg-emerald-300 hover:bg-emerald-400'
+              : ''
+          "
         >
           {{ client.SCORE }}
         </td>
         <td
-          v-if="ahp"
           data-label="score_ahp"
-          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+          :class="
+            index < 5 && currentPage === 0 && ahp
+              ? 'bg-emerald-300 hover:bg-emerald-400'
+              : ''
+          "
         >
           {{ client.ahpTotal.toFixed(2) }}
         </td>
         <td
-          v-if="ahp"
           data-label="score_ipk"
-          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+          :class="
+            index < 5 && currentPage === 0 && ahp
+              ? 'bg-emerald-300 hover:bg-emerald-400'
+              : ''
+          "
         >
           {{ client.ahp.ipk.toFixed(2) }}
         </td>
         <td
-          v-if="ahp"
           data-label="score_tak"
-          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+          :class="
+            index < 5 && currentPage === 0 && ahp
+              ? 'bg-emerald-300 hover:bg-emerald-400'
+              : ''
+          "
         >
           {{ client.ahp.tak.toFixed(2) }}
         </td>
         <td
-          v-if="ahp"
           data-label="score_prestasi"
-          :class="index < 5 ? 'bg-emerald-300 hover:bg-emerald-400' : ''"
+          :class="
+            index < 5 && currentPage === 0 && ahp
+              ? 'bg-emerald-300 hover:bg-emerald-400'
+              : ''
+          "
         >
           {{ client.ahp.prestasi.toFixed(2) }}
         </td>
