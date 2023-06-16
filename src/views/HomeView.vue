@@ -31,8 +31,9 @@ let studentDatas = reactive({
   finalAHP: [],
 });
 
+const rawData = ref(null);
+
 const readExcelFile2 = async () => {
-  console.log("readExcelFile2");
   const url = new URL("./data_wisudawan.xls", import.meta.url).href;
   const data = await (await fetch(url)).arrayBuffer();
   /* data is an ArrayBuffer */
@@ -42,6 +43,36 @@ const readExcelFile2 = async () => {
   const worksheet = workbook.Sheets[firstSheetName];
   const sheetValues = XLSX.utils.sheet_to_json(worksheet);
   studentDatas.raw = sheetValues;
+};
+
+const readExcelFile3 = async () => {
+  const url = new URL("./wisudawan_raw.xls", import.meta.url).href;
+  const data = await (await fetch(url)).arrayBuffer();
+  /* data is an ArrayBuffer */
+  const workbook = XLSX.read(data);
+
+  const firstSheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[firstSheetName];
+  const sheetValues = XLSX.utils.sheet_to_json(worksheet);
+  rawData.value = sheetValues;
+  console.log("readExcelFile3");
+  console.log(rawData);
+
+  rawData.value.forEach((el) => {
+    if (el.COMPETITIONLIST) {
+      const competitions = el.COMPETITIONLIST.split(/\r?\n/);
+      // console.log(el.FULLNAME);
+      // console.log(competitions);
+      competitions.forEach((el) => {
+        console.log(el.split("_"));
+        const sp = el.split("_");
+        console.log(sp[1], typeof sp[1]);
+        if (sp[1]) {
+          console.log(sp[1].split(","));
+        }
+      });
+    }
+  });
 };
 
 //
@@ -67,6 +98,63 @@ const AHPValue = {
     sub: {
       greater: 0.83,
       lesser: 0.17,
+    },
+  },
+};
+
+const fixedPrestasi = {
+  kemendikbud: {
+    internasional: {
+      1: 30,
+      2: 25,
+      3: 20,
+      harapan: 17,
+      inspiring: 16,
+      finalis: 15,
+    },
+    nasional: {
+      1: 25,
+      3: 20,
+      2: 15,
+      hibah: 15,
+      harapan: 13,
+      inpiring: 12,
+      finalis: 11,
+      pendanaan: 10,
+    },
+    regional: {
+      1: 10,
+      2: 9,
+      3: 8,
+      harapan: 6,
+      inspiring: 5,
+      finalis: 3,
+    },
+  },
+  mandiri: {
+    internasional: {
+      1: 15,
+      2: 14,
+      3: 13,
+      harapan: 12,
+      inspiring: 11,
+      finalis: 10,
+    },
+    nasional: {
+      1: 10,
+      2: 9,
+      3: 8,
+      harapan: 7,
+      inspiring: 6,
+      finalis: 5,
+    },
+    regional: {
+      1: 7,
+      2: 6,
+      3: 5,
+      harapan: 4,
+      inspiring: 3,
+      finalis: 2,
     },
   },
 };
@@ -131,7 +219,10 @@ const calculateStudent = () => {
 onMounted(async () => {
   fillChartData();
   await readExcelFile2();
+  await readExcelFile3();
   calculateStudent();
+  // console.log("raw datas");
+  // console.log(studentDatas.raw);
 });
 </script>
 
@@ -139,10 +230,10 @@ onMounted(async () => {
   <LayoutAuthenticated>
     <SectionMain>
       <SectionTitleLineWithButton
+        id="overview"
         :icon="mdiChartTimelineVariant"
         title="Overview"
         main
-        id="overview"
       >
         <!-- <BaseButton
           href="https://github.com/justboil/admin-one-vue-tailwind"

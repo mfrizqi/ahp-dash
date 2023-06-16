@@ -108,10 +108,10 @@ onMounted(() => {
         <th>IPK</th>
         <th>TAK</th>
         <th>Prestasi</th>
-        <th>Score AHP</th>
+        <!-- <th>Score AHP</th>
         <th>AHP IPK</th>
         <th>AHP TAK</th>
-        <th>AHP Prestasi</th>
+        <th>AHP Prestasi</th> -->
       </tr>
     </thead>
     <tbody>
@@ -180,7 +180,7 @@ onMounted(() => {
         >
           {{ client.SCORE }}
         </td>
-        <td
+        <!-- <td
           data-label="score_ahp"
           :class="
             index < 5 && currentPage === 0 && ahp
@@ -219,7 +219,7 @@ onMounted(() => {
           "
         >
           {{ client.ahp.prestasi.toFixed(2) }}
-        </td>
+        </td> -->
       </tr>
     </tbody>
   </table>
