@@ -5,6 +5,7 @@ import {
   mdiAccountMultiple,
   // mdiCartOutline,
   mdiChartTimelineVariant,
+  mdiMedal,
 } from "@mdi/js";
 import * as chartConfig from "@/components/Charts/chart.config.js";
 import SectionMain from "@/components/SectionMain.vue";
@@ -30,6 +31,7 @@ let studentDatas = reactive({
   raw: [],
   calculated: [],
   finalAHP: [],
+  sortAHP: [],
   uploadRaw: [],
   uploadCalculated: [],
   uploadFinal: [],
@@ -41,9 +43,9 @@ const isInit = ref(true);
 const readExcelFile2 = async () => {
   const url = new URL("./data_wisudawan.xls", import.meta.url).href;
   const data = await (await fetch(url)).arrayBuffer();
-  console.log("readExcelFile2");
-  console.log(url);
-  console.log(data);
+  // console.log("readExcelFile2");
+  // console.log(url);
+  // console.log(data);
   /* data is an ArrayBuffer */
   const workbook = XLSX.read(data);
 
@@ -63,8 +65,8 @@ const readExcelFileLatest = async () => {
   const worksheet = workbook.Sheets[firstSheetName];
   const sheetValues = XLSX.utils.sheet_to_json(worksheet);
   studentDatas.raw = sheetValues;
-  console.log("readExcelFileLatest");
-  console.log(studentDatas);
+  // console.log("readExcelFileLatest");
+  // console.log(studentDatas);
 
   const prepData = [];
   // Loop setiap mahasiswa
@@ -82,7 +84,7 @@ const readExcelFileLatest = async () => {
         juara: null,
       };
       const sp = compt.split("_");
-      console.log(sp);
+      // console.log(sp);
       lomba.title = sp[0];
       lomba.value = sp[1];
 
@@ -91,9 +93,9 @@ const readExcelFileLatest = async () => {
 
         competitionsFinal.push(lomba);
         if (sp[1]) {
-          console.log(sp[1]);
+          // console.log(sp[1]);
           const competeValue = sp[1].split(",");
-          console.log(competeValue);
+          // console.log(competeValue);
           if (competeValue) {
             if (sp[1][0]) {
               lomba.jenis = competeValue[0];
@@ -109,8 +111,8 @@ const readExcelFileLatest = async () => {
       }
     });
 
-    console.log(competitionsTitle);
-    console.log(competitionsFinal);
+    // console.log(competitionsTitle);
+    // console.log(competitionsFinal);
     prepData.push({
       ...el,
       competitions: competitionsTitle,
@@ -211,6 +213,11 @@ const fixedPrestasi = {
   },
 };
 
+const show = ref(null);
+const toggleDropdown = (idx) => {
+  show.value === idx ? (show.value = null) : (show.value = idx);
+};
+
 //
 // Function: Menghithung Score Prestasi dari tiap Mahasiswa
 //
@@ -292,12 +299,20 @@ const calculateStudent = () => {
     studentDatas.finalAHP.sort((a, b) => {
       return b.SCORE - a.SCORE;
     });
+
+    console.log(studentDatas.finalAHP);
+
+    for (let i = 0; i < 5; i++) {
+      studentDatas.sortAHP.push(studentDatas.finalAHP[i]);
+    }
+
+    console.log(studentDatas.sortAHP);
   }
 };
 
 const uploadFile = (event) => {
-  console.log(form);
-  console.log(form.file);
+  // console.log(form);
+  // console.log(form.file);
   const eventFile = event.target.files ? event.target.files[0] : null;
   if (eventFile) {
     const reader = new FileReader();
@@ -315,7 +330,7 @@ const uploadFile = (event) => {
       // console.log(XLSX.utils.sheet_to_json(worksheet, { raw: true }));
       var arraylist = XLSX.utils.sheet_to_json(worksheet, { raw: true });
       studentDatas.uploadRaw = arraylist;
-      console.log(studentDatas.uploadRaw);
+      // console.log(studentDatas.uploadRaw);
     };
   }
 };
@@ -325,11 +340,7 @@ onMounted(async () => {
   // await readExcelFile2();
   await readExcelFileLatest();
   calculateCompetitionScore();
-  console.log("studentDatas.raw");
-  console.log(studentDatas.raw);
-  calculateStudent();
-  // console.log("raw datas");
-  // console.log(studentDatas.raw);
+  await calculateStudent();
 });
 </script>
 
@@ -375,6 +386,41 @@ onMounted(async () => {
           label="Upload"
           @change="uploadFile($event)"
         />
+      </CardBox>
+
+      <SectionTitleLineWithButton
+        :icon="mdiMedal"
+        title="Wisudawan Berprestasi"
+        main
+      />
+
+      <CardBox class="mb-4">
+        <div v-for="index in 5" :key="index" class="mb-2">
+          <div class="flex justify-between">
+            <div class="text-lg font-medium text-zinc-600">
+              {{ index }}.
+              <span class="ml-2"
+                >{{ studentDatas.finalAHP[index - 1]?.FULLNAME }} -
+                {{ studentDatas.finalAHP[index - 1]?.STUDENTID }}</span
+              >
+            </div>
+            <div
+              class="cursor-pointer bg-blue-600 px-2 py-2 text-white rounded-lg"
+              @click="toggleDropdown(index)"
+            >
+              Lihat Kompetisi
+            </div>
+          </div>
+          <div v-if="show === index" class="pl-1 pr-40">
+            <div
+              v-for="(compete, i) in studentDatas.finalAHP[index - 1]
+                ?.competitions"
+              :key="i"
+            >
+              {{ compete }}
+            </div>
+          </div>
+        </div>
       </CardBox>
 
       <SectionTitleLineWithButton
