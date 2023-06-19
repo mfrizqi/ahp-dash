@@ -53,8 +53,8 @@ const readExcelFile2 = async () => {
   studentDatas.raw = sheetValues;
 };
 
-const readExcelFile3 = async () => {
-  const url = new URL("./wisudawan_raw.xls", import.meta.url).href;
+const readExcelFileLatest = async () => {
+  const url = new URL("./data_wisudawan_latest.xls", import.meta.url).href;
   const data = await (await fetch(url)).arrayBuffer();
   /* data is an ArrayBuffer */
   const workbook = XLSX.read(data);
@@ -62,37 +62,72 @@ const readExcelFile3 = async () => {
   const firstSheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[firstSheetName];
   const sheetValues = XLSX.utils.sheet_to_json(worksheet);
-  rawData.value = sheetValues;
-  console.log("readExcelFile3");
-  console.log(rawData);
+  studentDatas.raw = sheetValues;
+  console.log("readExcelFileLatest");
+  console.log(studentDatas);
 
-  rawData.value.forEach((el) => {
-    if (el.COMPETITIONLIST) {
-      const competitions = el.COMPETITIONLIST.split(/\r?\n/);
-      // console.log(el.FULLNAME);
-      // console.log(competitions);
-      competitions.forEach((el) => {
-        // console.log(el.split("_"));
-        const sp = el.split("_");
-        // console.log(sp[1], typeof sp[1]);
+  const prepData = [];
+  // Loop setiap mahasiswa
+  studentDatas.raw.forEach((el) => {
+    // Split setiap baris kompetisi
+    const competitions = el.COMPETITIONLIST.split(/\r?\n/);
+
+    const competitionsFinal = [];
+    const competitionsTitle = [];
+    competitions.forEach((compt) => {
+      let lomba = {
+        title: "",
+        jenis: null,
+        tingkat: null,
+        juara: null,
+      };
+      const sp = compt.split("_");
+      console.log(sp);
+      lomba.title = sp[0];
+      lomba.value = sp[1];
+
+      if (sp[0] !== "-") {
+        competitionsTitle.push(sp[0]);
+
+        competitionsFinal.push(lomba);
         if (sp[1]) {
-          // console.log(sp[1].split(","));
+          console.log(sp[1]);
+          const competeValue = sp[1].split(",");
+          console.log(competeValue);
+          if (competeValue) {
+            if (sp[1][0]) {
+              lomba.jenis = competeValue[0];
+            }
+            if (sp[1][1]) {
+              lomba.tingkat = competeValue[1];
+            }
+            if (sp[1][2]) {
+              lomba.juara = competeValue[2];
+            }
+          }
         }
-      });
-    }
+      }
+    });
+
+    console.log(competitionsTitle);
+    console.log(competitionsFinal);
+    prepData.push({
+      ...el,
+      competitions: competitionsTitle,
+      competitionsFinal: competitionsFinal,
+    });
   });
+
+  studentDatas.raw = prepData;
 };
 
 const form = reactive({
   file: null,
 });
 
-//
-// Nilai hasil perhitungan AHP
-// TODO : Perubahan value dari Rey untuk main value
 const AHPValue = {
   ipk: {
-    main: 0.63,
+    main: 0.26,
     sub: {
       greater: 0.83,
       lesser: 0.17,
@@ -106,7 +141,7 @@ const AHPValue = {
     },
   },
   prestasi: {
-    main: 0.26,
+    main: 0.63,
     sub: {
       greater: 0.83,
       lesser: 0.17,
@@ -169,6 +204,36 @@ const fixedPrestasi = {
       finalis: 2,
     },
   },
+  rekognisi: {
+    internasional: 10,
+    nasional: 8,
+    regional: 5,
+  },
+};
+
+//
+// Function: Menghithung Score Prestasi dari tiap Mahasiswa
+//
+
+const calculateCompetitionScore = () => {
+  const calculatedCompetitions = studentDatas.raw.map((el) => {
+    let SCORE = 0;
+
+    el.competitionsFinal.forEach((cf) => {
+      if (cf.jenis !== "rekognisi" && cf.jenis && cf.tingkat && cf.juara) {
+        SCORE += fixedPrestasi[cf.jenis][cf.tingkat][cf.juara];
+      }
+
+      if (cf.jenis === "rekognisi" && cf.jenis && cf.tingkat) {
+        SCORE += fixedPrestasi[cf.jenis][cf.tingkat];
+      }
+    });
+    return {
+      ...el,
+      SCORE: SCORE,
+    };
+  });
+  studentDatas.raw = calculatedCompetitions;
 };
 
 //
@@ -257,8 +322,11 @@ const uploadFile = (event) => {
 
 onMounted(async () => {
   fillChartData();
-  await readExcelFile2();
-  await readExcelFile3();
+  // await readExcelFile2();
+  await readExcelFileLatest();
+  calculateCompetitionScore();
+  console.log("studentDatas.raw");
+  console.log(studentDatas.raw);
   calculateStudent();
   // console.log("raw datas");
   // console.log(studentDatas.raw);
@@ -300,7 +368,8 @@ onMounted(async () => {
         />
       </div>
 
-      <CardBox class="mb-4">
+      <!-- VIEW : Upload Button -->
+      <CardBox class="mb-4 hidden">
         <FormFilePicker
           v-model="form.file"
           label="Upload"
