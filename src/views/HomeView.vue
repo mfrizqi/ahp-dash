@@ -7,22 +7,14 @@ import {
   mdiChartTimelineVariant,
   mdiMedal,
 } from "@mdi/js";
-import * as chartConfig from "@/components/Charts/chart.config.js";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBoxWidget from "@/components/CardBoxWidget.vue";
 import CardBox from "@/components/CardBox.vue";
-import FormFilePicker from "@/components/FormFilePicker.vue";
 // import TableSampleClients from "@/components/TableSampleClients.vue";
 import TableMahasiswa from "@/components/TableMahasiswa.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import * as XLSX from "xlsx";
-
-const chartData = ref(null);
-
-const fillChartData = () => {
-  chartData.value = chartConfig.sampleChartData();
-};
 
 //
 // AHP Calculation
@@ -37,7 +29,6 @@ let studentDatas = reactive({
   uploadFinal: [],
 });
 
-const rawData = ref(null);
 const isInit = ref(true);
 
 const readExcelFile2 = async () => {
@@ -56,7 +47,7 @@ const readExcelFile2 = async () => {
 };
 
 const readExcelFileLatest = async () => {
-  const url = new URL("./data_wisudawan_latest.xls", import.meta.url).href;
+  const url = new URL("./data_wisudawan_latest_ext.xls", import.meta.url).href;
   const data = await (await fetch(url)).arrayBuffer();
   /* data is an ArrayBuffer */
   const workbook = XLSX.read(data);
@@ -65,12 +56,13 @@ const readExcelFileLatest = async () => {
   const worksheet = workbook.Sheets[firstSheetName];
   const sheetValues = XLSX.utils.sheet_to_json(worksheet);
   studentDatas.raw = sheetValues;
-  // console.log("readExcelFileLatest");
-  // console.log(studentDatas);
+  console.log("readExcelFileLatest");
+  console.log(studentDatas);
 
   const prepData = [];
   // Loop setiap mahasiswa
   studentDatas.raw.forEach((el) => {
+    console.log(el);
     // Split setiap baris kompetisi
     const competitions = el.COMPETITIONLIST.split(/\r?\n/);
 
@@ -123,10 +115,6 @@ const readExcelFileLatest = async () => {
   studentDatas.raw = prepData;
 };
 
-const form = reactive({
-  file: null,
-});
-
 const AHPValue = {
   ipk: {
     main: 0.26,
@@ -167,7 +155,7 @@ const fixedPrestasi = {
       2: 15,
       hibah: 15,
       harapan: 13,
-      inpiring: 12,
+      inspiring: 12,
       finalis: 11,
       pendanaan: 10,
     },
@@ -227,6 +215,7 @@ const calculateCompetitionScore = () => {
     let SCORE = 0;
 
     el.competitionsFinal.forEach((cf) => {
+      console.log(cf);
       if (cf.jenis !== "rekognisi" && cf.jenis && cf.tingkat && cf.juara) {
         SCORE += fixedPrestasi[cf.jenis][cf.tingkat][cf.juara];
       }
@@ -310,33 +299,7 @@ const calculateStudent = () => {
   }
 };
 
-const uploadFile = (event) => {
-  // console.log(form);
-  // console.log(form.file);
-  const eventFile = event.target.files ? event.target.files[0] : null;
-  if (eventFile) {
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(eventFile);
-    reader.onload = (e) => {
-      const arrayBuffer = reader.result;
-      var data = new Uint8Array(arrayBuffer);
-      var arr = new Array();
-      for (var i = 0; i != data.length; ++i)
-        arr[i] = String.fromCharCode(data[i]);
-      var bstr = arr.join("");
-      var workbook = XLSX.read(bstr, { type: "binary" });
-      var first_sheet_name = workbook.SheetNames[0];
-      var worksheet = workbook.Sheets[first_sheet_name];
-      // console.log(XLSX.utils.sheet_to_json(worksheet, { raw: true }));
-      var arraylist = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-      studentDatas.uploadRaw = arraylist;
-      // console.log(studentDatas.uploadRaw);
-    };
-  }
-};
-
 onMounted(async () => {
-  fillChartData();
   // await readExcelFile2();
   await readExcelFileLatest();
   calculateCompetitionScore();
@@ -378,15 +341,6 @@ onMounted(async () => {
           label="Mahasiswa Berprestasi"
         />
       </div>
-
-      <!-- VIEW : Upload Button -->
-      <CardBox class="mb-4 hidden">
-        <FormFilePicker
-          v-model="form.file"
-          label="Upload"
-          @change="uploadFile($event)"
-        />
-      </CardBox>
 
       <SectionTitleLineWithButton
         :icon="mdiMedal"
